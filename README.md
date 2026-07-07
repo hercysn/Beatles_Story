@@ -97,7 +97,7 @@ supabase/migrations/20260707000000_initial_content_schema.sql
 
 - Application database reads, public read policies, admin auth, ingestion jobs, and AI integrations are intentionally not wired into the public UI yet.
 - Several reader-facing quotes in the guided hook drafts are marked for source and wording verification before publication.
-- Chinese guided hook pages currently preserve the route and chapter structure; full Chinese long-form translations still need an editorial pass.
+- English and Chinese guided hook pages now have first-draft long-form content; both still need a later editorial/source-verification pass.
 
 ## Web App Notes
 

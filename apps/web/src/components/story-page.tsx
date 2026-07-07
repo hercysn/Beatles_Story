@@ -29,6 +29,17 @@ export function StoryPage(props: StoryPageProps) {
   }
 
   const { fixture } = props;
+  const labels = {
+    chapter: "Chapter",
+    documented: "Documented",
+    inferred: "Inferred",
+    debated: "Debated",
+    representativeSong: "Representative song",
+    relatedEvents: "Related events",
+    deeperReading: "Deeper reading",
+    verifyWording: "Verify wording",
+    ...fixture.labels,
+  };
 
   return (
     <article className="mx-auto w-full max-w-5xl px-6 py-14 sm:py-20">
@@ -75,7 +86,7 @@ export function StoryPage(props: StoryPageProps) {
             className="scroll-mt-24 border-t border-ink/10 pt-10"
           >
             <p className="text-sm font-semibold uppercase text-apple">
-              Chapter {index + 1}
+              {labels.chapter} {index + 1}
             </p>
             <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink sm:text-3xl">
               {chapter.title}
@@ -103,25 +114,25 @@ export function StoryPage(props: StoryPageProps) {
                   {chapter.quote.attribution}
                   {chapter.quote.needsVerification ? (
                     <span className="ml-2 font-semibold text-apple">
-                      Verify wording
+                      {labels.verifyWording}
                     </span>
                   ) : null}
                 </footer>
               </blockquote>
             ) : null}
 
-            <EvidenceGroups evidence={chapter.evidence} />
+            <EvidenceGroups evidence={chapter.evidence} labels={labels} />
 
             <div className="mt-8 grid gap-4 rounded-lg border border-ink/10 bg-cream p-5 lg:grid-cols-[0.8fr_1.2fr]">
               <div>
                 <p className="text-xs font-semibold uppercase text-moss">
-                  Representative song
+                  {labels.representativeSong}
                 </p>
                 <p className="mt-2 font-semibold text-ink">{chapter.song}</p>
               </div>
               <div>
                 <p className="text-xs font-semibold uppercase text-moss">
-                  Related events
+                  {labels.relatedEvents}
                 </p>
                 <ul className="mt-2 flex flex-wrap gap-2">
                   {chapter.relatedEvents.map((event) => (
@@ -137,7 +148,7 @@ export function StoryPage(props: StoryPageProps) {
               {chapter.deeperReading ? (
                 <div className="lg:col-span-2">
                   <p className="text-xs font-semibold uppercase text-moss">
-                    Deeper reading
+                    {labels.deeperReading}
                   </p>
                   <p className="mt-2 text-sm leading-6 text-muted">
                     {chapter.deeperReading}
@@ -154,8 +165,10 @@ export function StoryPage(props: StoryPageProps) {
 
 function EvidenceGroups({
   evidence,
+  labels,
 }: {
   evidence?: StoryFixture["chapters"][number]["evidence"];
+  labels: Required<NonNullable<StoryFixture["labels"]>>;
 }) {
   if (!evidence) {
     return null;
@@ -170,9 +183,9 @@ function EvidenceGroups({
           key={`${group.documented}-${group.inferred}-${group.debated}`}
           className="grid gap-3 lg:grid-cols-3"
         >
-          <EvidencePanel title="Documented" text={group.documented} />
-          <EvidencePanel title="Inferred" text={group.inferred} />
-          <EvidencePanel title="Debated" text={group.debated} />
+          <EvidencePanel title={labels.documented} text={group.documented} />
+          <EvidencePanel title={labels.inferred} text={group.inferred} />
+          <EvidencePanel title={labels.debated} text={group.debated} />
         </div>
       ))}
     </div>

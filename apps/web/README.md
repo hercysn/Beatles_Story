@@ -54,7 +54,7 @@ The app supports English and Simplified Chinese routes through `next-intl` routi
 /zh
 ```
 
-The homepage and navigation have localized content. The guided hook pages have full English draft content and Chinese structural placeholders pending a full translation pass.
+The homepage, navigation, and guided hook pages have localized English and Simplified Chinese content. The guided hooks are still first drafts and need a later editorial/source-verification pass.
 
 ## Evidence Model
 
