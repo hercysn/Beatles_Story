@@ -95,7 +95,9 @@ export function StoryPage(props: StoryPageProps) {
             {chapter.quote ? (
               <blockquote className="mt-7 border-l-4 border-moss pl-5">
                 <p className="text-lg font-medium leading-8 text-ink">
-                  "{chapter.quote.text}"
+                  {"\""}
+                  {chapter.quote.text}
+                  {"\""}
                 </p>
                 <footer className="mt-2 text-sm text-muted">
                   {chapter.quote.attribution}
