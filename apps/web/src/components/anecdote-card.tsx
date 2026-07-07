@@ -1,3 +1,4 @@
+import { EvidenceLabel } from "@/components/evidence-label";
 import { LocalizedLink } from "@/components/localized-link";
 import type { AnecdoteFixture } from "@/content/anecdotes";
 
@@ -17,9 +18,7 @@ export function AnecdoteCard({
   return (
     <article className="flex h-full flex-col rounded-lg border border-ink/10 bg-cream p-5 shadow-sm shadow-ink/5 transition hover:-translate-y-0.5 hover:border-apple hover:bg-white">
       <div className="flex flex-wrap gap-2">
-        <span className="rounded-full bg-grove px-3 py-1 text-xs font-semibold text-ink ring-1 ring-apple/20">
-          {anecdote.evidenceStatus}
-        </span>
+        <EvidenceLabel status={anecdote.evidenceStatus} />
         <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-muted ring-1 ring-ink/10">
           {anecdote.dateLabel}
         </span>

@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { ConnectionChain } from "@/components/connection-chain";
+import { EvidenceLabel } from "@/components/evidence-label";
 import type {
   AnecdoteDetailLabels,
   AnecdoteFixture,
@@ -14,9 +16,7 @@ export function AnecdoteDetail({ anecdote, labels }: AnecdoteDetailProps) {
   return (
     <article className="mx-auto w-full max-w-5xl px-6 py-14 sm:py-20">
       <header className="border-l-4 border-apple pl-6">
-        <p className="text-sm font-semibold uppercase text-apple">
-          {anecdote.evidenceStatus}
-        </p>
+        <EvidenceLabel status={anecdote.evidenceStatus} />
         <h1 className="mt-3 text-3xl font-semibold leading-tight text-ink sm:text-5xl">
           {anecdote.title}
         </h1>
@@ -81,18 +81,9 @@ export function AnecdoteDetail({ anecdote, labels }: AnecdoteDetailProps) {
             <h2 className="text-lg font-semibold text-ink">
               {labels.connectionChain}
             </h2>
-            <ol className="mt-4 space-y-3">
-              {anecdote.connectionChain.map((item, index) => (
-                <li key={item} className="flex gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-apple text-sm font-semibold text-white">
-                    {index + 1}
-                  </span>
-                  <span className="pt-1 text-sm leading-6 text-muted">
-                    {item}
-                  </span>
-                </li>
-              ))}
-            </ol>
+            <div className="mt-4">
+              <ConnectionChain items={anecdote.connectionChain} />
+            </div>
           </section>
 
           <section>
