@@ -96,9 +96,20 @@ export function AnecdoteDetail({ anecdote, labels }: AnecdoteDetailProps) {
                   key={source.title}
                   className="rounded-lg border border-ink/10 bg-cream p-4"
                 >
-                  <h3 className="text-sm font-semibold text-ink">
-                    {source.title}
-                  </h3>
+                  {source.url ? (
+                    <a
+                      href={source.url}
+                      className="text-sm font-semibold text-apple underline-offset-4 hover:underline"
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      {source.title}
+                    </a>
+                  ) : (
+                    <h3 className="text-sm font-semibold text-ink">
+                      {source.title}
+                    </h3>
+                  )}
                   <p className="mt-2 text-sm leading-6 text-muted">
                     {source.detail}
                   </p>

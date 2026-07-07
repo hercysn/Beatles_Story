@@ -17,6 +17,8 @@ describe("anecdoteFixtures", () => {
   it("keeps slugs aligned across locales", () => {
     const expectedSlugs = getAnecdoteSlugs();
 
+    expect(expectedSlugs).toHaveLength(5);
+
     for (const fixture of Object.values(anecdoteFixtures)) {
       expect(fixture.items.map((item) => item.slug)).toEqual(expectedSlugs);
     }
