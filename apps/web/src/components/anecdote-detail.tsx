@@ -3,13 +3,13 @@ import type { ReactNode } from "react";
 import { ConnectionChain } from "@/components/connection-chain";
 import { EvidenceLabel } from "@/components/evidence-label";
 import type {
-  AnecdoteDetailLabels,
-  AnecdoteFixture,
-} from "@/content/anecdotes";
+  PublicAnecdote,
+  PublicAnecdoteDetailLabels,
+} from "@/lib/content/public";
 
 type AnecdoteDetailProps = {
-  anecdote: AnecdoteFixture;
-  labels: AnecdoteDetailLabels;
+  anecdote: PublicAnecdote;
+  labels: PublicAnecdoteDetailLabels;
 };
 
 export function AnecdoteDetail({ anecdote, labels }: AnecdoteDetailProps) {

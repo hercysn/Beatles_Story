@@ -1,9 +1,9 @@
 import { EvidenceLabel } from "@/components/evidence-label";
 import { LocalizedLink } from "@/components/localized-link";
-import type { AnecdoteFixture } from "@/content/anecdotes";
+import type { PublicAnecdote } from "@/lib/content/public";
 
 type AnecdoteCardProps = {
-  anecdote: AnecdoteFixture;
+  anecdote: PublicAnecdote;
   readLabel: string;
   peopleLabel: string;
   placeLabel: string;

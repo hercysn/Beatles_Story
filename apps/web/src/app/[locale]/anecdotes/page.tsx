@@ -1,6 +1,6 @@
 import { AnecdoteCard } from "@/components/anecdote-card";
-import { getAnecdoteCollection } from "@/content/anecdotes";
 import type { Locale } from "@/i18n/routing";
+import { getPublicAnecdoteCollection } from "@/lib/content/public";
 
 type AnecdotesPageProps = {
   params: Promise<{ locale: string }>;
@@ -8,7 +8,7 @@ type AnecdotesPageProps = {
 
 export default async function AnecdotesPage({ params }: AnecdotesPageProps) {
   const { locale } = await params;
-  const fixture = getAnecdoteCollection(locale as Locale);
+  const fixture = getPublicAnecdoteCollection(locale as Locale);
 
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-14 sm:py-20">

@@ -1,8 +1,8 @@
-import type { EvidenceStatus } from "@/content/anecdotes";
+import type { PublicEvidenceStatus } from "@/lib/content/public";
 
 type EvidenceTone = "fact" | "recollection" | "disputed" | "interpretive";
 
-const evidenceToneByStatus: Record<EvidenceStatus, EvidenceTone> = {
+const evidenceToneByStatus: Record<PublicEvidenceStatus, EvidenceTone> = {
   "Documented context": "fact",
   "Corroborated recollection": "recollection",
   "Disputed recollection": "disputed",
@@ -18,7 +18,7 @@ const evidenceClassByTone: Record<EvidenceTone, string> = {
 };
 
 type EvidenceLabelProps = {
-  status: EvidenceStatus;
+  status: PublicEvidenceStatus;
   className?: string;
 };
 
