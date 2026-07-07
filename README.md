@@ -2,6 +2,24 @@
 
 A multilingual storytelling website for newcomers to the Beatles. The product is intentionally not a comprehensive encyclopedia; it is a quick, compelling introduction to the Beatles, John and Paul's partnership, McLennon as an interpretive lens, and memorable anecdotes or hidden historical connections.
 
+## Current Stage
+
+Beatles Story is in the fixture-backed MVP prototype stage.
+
+The web app currently uses typed static content fixtures for the public reader experience. This keeps the story structure, localization model, and UI surfaces testable while the database, editorial workflow, ingestion, and AI-assisted drafting pipelines remain under construction.
+
+Implemented public surfaces include:
+
+- localized English and Simplified Chinese routes;
+- a content-driven homepage;
+- guided "Start with the Beatles" and "Start with John and Paul" hooks;
+- an anecdote collection and individual anecdote pages backed by seed fixtures;
+- basic timeline and editorial placeholder routes;
+- public anecdote API route handlers over the current seed content;
+- content fixture tests and route/content boundary tests.
+
+The database schema and shared TypeScript database types are present, but the public UI is not yet reading live Supabase content.
+
 ## Project Structure
 
 - `apps/web` - Next.js App Router website with English and Simplified Chinese routes.
@@ -67,7 +85,7 @@ pnpm build
 
 ## Database Schema
 
-See `database/README.md` for the schema design notes and Task 3/Task 4 implementation summaries.
+See `database/README.md` for schema design notes, migration details, and the current database integration stage.
 
 The executable migration is:
 
@@ -77,8 +95,10 @@ supabase/migrations/20260707000000_initial_content_schema.sql
 
 ## Notes
 
-Application database integration and AI integrations are intentionally not included yet.
+- Application database reads, public read policies, admin auth, ingestion jobs, and AI integrations are intentionally not wired into the public UI yet.
+- Several reader-facing quotes in the guided hook drafts are marked for source and wording verification before publication.
+- Chinese guided hook pages currently preserve the route and chapter structure; full Chinese long-form translations still need an editorial pass.
 
 ## Web App Notes
 
-See `apps/web/README.md` for frontend implementation notes, including the static homepage fixture data added in Task 5.
+See `apps/web/README.md` for frontend implementation notes.

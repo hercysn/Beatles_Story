@@ -2,6 +2,12 @@
 
 This directory documents the content database design. The executable Supabase/PostgreSQL migrations live in `../supabase/migrations`.
 
+## Current Stage
+
+The database layer is in the schema-ready, app-integration-pending stage.
+
+The initial PostgreSQL schema and matching shared TypeScript types are present. The public web app still renders from static fixtures and seed content; live Supabase reads, public read policies, admin auth, ingestion jobs, and AI processing are deferred until the content API and editorial workflow are ready.
+
 ## Initial Schema
 
 The initial content schema is defined in:
@@ -166,52 +172,3 @@ packages/shared-types/src/database.type-test.ts
 ```
 
 These tests are compiled by `pnpm typecheck` and verify representative enum, required-field, and claim-parent constraints.
-
-## Task 3 Summary
-
-Implementation:
-
-- Added the initial PostgreSQL schema migration for the content backend.
-- Modeled canonical language-independent records separately from localized translations.
-- Added evidence, review, claim, source, event, anecdote, entity, and connection structures.
-- Did not add application database clients, auth, row-level security, ingestion, or AI integrations.
-
-Tests and verification:
-
-- `pnpm format:check`
-- `pnpm lint`
-- `pnpm typecheck`
-- `pnpm test`
-- `pnpm build`
-
-Changed files:
-
-- `database/README.md`
-- `supabase/migrations/20260707000000_initial_content_schema.sql`
-- `README.md`
-
-## Task 4 Summary
-
-Implementation:
-
-- Added TypeScript types matching the initial database records.
-- Added enum unions matching the PostgreSQL enum definitions.
-- Added row, insert, and update types for all migration tables.
-- Added a Supabase-style `Database` type for future client integration.
-- Added generic helpers for table-specific row, insert, and update access.
-
-Tests and verification:
-
-- `pnpm typecheck`
-- `pnpm test`
-- `pnpm lint`
-- `pnpm format:check`
-- `pnpm build`
-
-Changed files:
-
-- `packages/shared-types/src/database.ts`
-- `packages/shared-types/src/database.type-test.ts`
-- `packages/shared-types/src/index.ts`
-- `database/README.md`
-- `README.md`
