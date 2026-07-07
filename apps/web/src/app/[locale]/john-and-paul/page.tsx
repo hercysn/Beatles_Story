@@ -1,9 +1,14 @@
-import { useTranslations } from "next-intl";
-
 import { StoryPage } from "@/components/story-page";
+import { getStoryFixture } from "@/content/story-pages";
+import type { Locale } from "@/i18n/routing";
 
-export default function JohnAndPaulPage() {
-  const t = useTranslations("JohnAndPaulPage");
+type JohnAndPaulPageProps = {
+  params: Promise<{ locale: string }>;
+};
 
-  return <StoryPage title={t("title")} description={t("description")} />;
+export default async function JohnAndPaulPage({ params }: JohnAndPaulPageProps) {
+  const { locale } = await params;
+  const fixture = getStoryFixture("johnAndPaul", locale as Locale);
+
+  return <StoryPage fixture={fixture} />;
 }
