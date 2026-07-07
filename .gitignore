@@ -1,0 +1,13 @@
+node_modules
+.conda
+.pnpm-store
+.next
+out
+coverage
+.turbo
+.env
+.env.local
+.env.*.local
+*.tsbuildinfo
+dist
+playwright-report

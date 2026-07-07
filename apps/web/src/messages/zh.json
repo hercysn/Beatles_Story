@@ -1,0 +1,40 @@
+{
+  "Navigation": {
+    "start": "入门",
+    "johnPaul": "约翰与保罗",
+    "anecdotes": "轶事",
+    "timeline": "时间线"
+  },
+  "LanguageSwitcher": {
+    "label": "选择语言"
+  },
+  "Footer": {
+    "text": "给好奇的新读者的一份披头士故事导览。"
+  },
+  "HomePage": {
+    "eyebrow": "从故事进入",
+    "heroTitle": "读懂披头士，从约翰与保罗开始。",
+    "heroText": "不用先背年表。先抓住他们的故事、创作关系，以及那些让歌曲和时代重新变得鲜活的细节。",
+    "links": {
+      "beatles": "先认识披头士",
+      "johnPaul": "走近约翰与保罗",
+      "anecdote": "读一则幕后小故事"
+    }
+  },
+  "StartPage": {
+    "title": "先认识披头士",
+    "description": "这里会用几条清晰线索，带你从利物浦、汉堡、Beatlemania 一路走到录音室时期，以及那些歌曲后来留下的回声。"
+  },
+  "JohnAndPaulPage": {
+    "title": "走近约翰与保罗",
+    "description": "这里会聚焦两人的创作搭档关系：默契、竞争、拉扯，以及 McLennon 作为一种阅读方式，为什么会吸引那么多人。"
+  },
+  "AnecdotesPage": {
+    "title": "读一则幕后小故事",
+    "description": "这里会收纳短小但有记忆点的故事：隐藏关联、录音室细节，以及一些意想不到的历史回声。"
+  },
+  "TimelinePage": {
+    "title": "时间线",
+    "description": "这里会用时间顺序帮新读者定位大事件，但不会把网站做成一部百科全书。"
+  }
+}

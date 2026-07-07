@@ -1,0 +1,8 @@
+node_modules
+.conda
+.pnpm-store
+.next
+coverage
+dist
+pnpm-lock.yaml
+idea.md

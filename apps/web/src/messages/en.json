@@ -1,0 +1,40 @@
+{
+  "Navigation": {
+    "start": "Start",
+    "johnPaul": "John and Paul",
+    "anecdotes": "Anecdotes",
+    "timeline": "Timeline"
+  },
+  "LanguageSwitcher": {
+    "label": "Choose language"
+  },
+  "Footer": {
+    "text": "A warm, concise guide to the Beatles for curious newcomers."
+  },
+  "HomePage": {
+    "eyebrow": "A storytelling guide",
+    "heroTitle": "Understand the Beatles. Follow John and Paul.",
+    "heroText": "Begin with the story, the partnership, and the small details that make the Beatles feel newly alive.",
+    "links": {
+      "beatles": "Start with the Beatles",
+      "johnPaul": "Start with John and Paul",
+      "anecdote": "Discover an anecdote"
+    }
+  },
+  "StartPage": {
+    "title": "Start with the Beatles",
+    "description": "A placeholder path for the essential arc: Liverpool, Hamburg, Beatlemania, studio reinvention, and the afterlife of the songs."
+  },
+  "JohnAndPaulPage": {
+    "title": "Start with John and Paul",
+    "description": "A placeholder path for the creative partnership, friendly rivalry, emotional tension, and interpretive McLennon lens."
+  },
+  "AnecdotesPage": {
+    "title": "Discover an anecdote",
+    "description": "A placeholder path for compact stories, hidden links, studio details, and surprising historical echoes."
+  },
+  "TimelinePage": {
+    "title": "Timeline",
+    "description": "A placeholder chronological path for orienting newcomers without turning the site into an encyclopedia."
+  }
+}

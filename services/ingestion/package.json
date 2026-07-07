@@ -1,0 +1,5 @@
+{
+  "name": "@beatles-story/ingestion",
+  "private": true,
+  "type": "module"
+}

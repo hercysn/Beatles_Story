@@ -1,0 +1,4 @@
+channels:
+  - defaults
+dependencies:
+  - nodejs=20
