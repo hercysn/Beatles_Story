@@ -78,3 +78,7 @@ supabase/migrations/20260707000000_initial_content_schema.sql
 ## Notes
 
 Application database integration and AI integrations are intentionally not included yet.
+
+## Web App Notes
+
+See `apps/web/README.md` for frontend implementation notes, including the static homepage fixture data added in Task 5.
