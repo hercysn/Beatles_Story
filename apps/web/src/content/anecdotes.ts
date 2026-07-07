@@ -48,6 +48,10 @@ type AnecdoteCollectionLabels = {
   description: string;
   filtersTitle: string;
   filters: string[];
+  allTags: string;
+  activeFilter: string;
+  clearFilter: string;
+  noResults: string;
   readStory: string;
   detail: AnecdoteDetailLabels;
 };
@@ -732,6 +736,10 @@ export const anecdoteFixtures: Record<Locale, AnecdoteCollectionFixture> = {
         "tone",
         "evidence level",
       ],
+      allTags: "Browse by tag",
+      activeFilter: "Showing stories tagged",
+      clearFilter: "Clear filter",
+      noResults: "No anecdotes match this tag yet.",
       readStory: "Read the story",
       detail: {
         date: "Date",
@@ -758,6 +766,10 @@ export const anecdoteFixtures: Record<Locale, AnecdoteCollectionFixture> = {
         "短小但有记忆点的故事：隐藏关联、录音室细节和历史回声。每一则都会区分已记录事实和解释。",
       filtersTitle: "浏览方式",
       filters: ["人物", "时期", "地点", "歌曲", "关系", "语气", "证据等级"],
+      allTags: "按标签浏览",
+      activeFilter: "正在显示标签",
+      clearFilter: "清除筛选",
+      noResults: "还没有匹配这个标签的轶事。",
       readStory: "阅读故事",
       detail: {
         date: "日期",

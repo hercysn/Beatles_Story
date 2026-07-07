@@ -42,12 +42,13 @@ export function AnecdoteCard({
 
       <div className="mt-5 flex flex-wrap gap-2">
         {anecdote.tone.map((tone) => (
-          <span
+          <LocalizedLink
             key={tone}
-            className="rounded-full bg-paper px-3 py-1 text-xs font-medium text-muted ring-1 ring-ink/10"
+            href={getTagHref(tone)}
+            className="rounded-full bg-paper px-3 py-1 text-xs font-medium text-muted ring-1 ring-ink/10 transition hover:-translate-y-0.5 hover:bg-white hover:text-ink"
           >
             {tone}
-          </span>
+          </LocalizedLink>
         ))}
       </div>
 
@@ -59,4 +60,8 @@ export function AnecdoteCard({
       </LocalizedLink>
     </article>
   );
+}
+
+function getTagHref(tag: string) {
+  return `/anecdotes?tag=${encodeURIComponent(tag)}`;
 }

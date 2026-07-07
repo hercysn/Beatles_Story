@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { ConnectionChain } from "@/components/connection-chain";
 import { EvidenceLabel } from "@/components/evidence-label";
+import { LocalizedLink } from "@/components/localized-link";
 import type {
   PublicAnecdote,
   PublicAnecdoteDetailLabels,
@@ -134,12 +135,13 @@ export function AnecdoteDetail({ anecdote, labels }: AnecdoteDetailProps) {
             </h2>
             <div className="mt-4 flex flex-wrap gap-2">
               {anecdote.related.map((item) => (
-                <span
+                <LocalizedLink
                   key={item}
+                  href={getTagHref(item)}
                   className="rounded-full bg-vinyl px-3 py-1 text-xs font-medium text-cream"
                 >
                   {item}
-                </span>
+                </LocalizedLink>
               ))}
             </div>
           </section>
@@ -147,6 +149,10 @@ export function AnecdoteDetail({ anecdote, labels }: AnecdoteDetailProps) {
       </div>
     </article>
   );
+}
+
+function getTagHref(tag: string) {
+  return `/anecdotes?tag=${encodeURIComponent(tag)}`;
 }
 
 type DetailSectionProps = {

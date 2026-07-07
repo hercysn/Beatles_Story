@@ -151,12 +151,13 @@ export default async function HomePage({ params }: HomePageProps) {
         </h2>
         <div className="mt-5 flex flex-wrap gap-3">
           {fixture.explore.items.map((item) => (
-            <span
+            <LocalizedLink
               key={item}
-              className="rounded-full bg-cream px-4 py-2 text-sm font-medium text-muted ring-1 ring-ink/10"
+              href={`/anecdotes?tag=${encodeURIComponent(item)}`}
+              className="rounded-full bg-cream px-4 py-2 text-sm font-medium text-muted ring-1 ring-ink/10 transition hover:-translate-y-0.5 hover:bg-white hover:text-ink"
             >
               {item}
-            </span>
+            </LocalizedLink>
           ))}
         </div>
       </section>

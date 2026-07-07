@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  filterPublicAnecdotesByTag,
   getPublicAnecdote,
   getPublicAnecdoteCollection,
   getPublicAnecdoteSlugs,
+  getPublicAnecdoteTags,
   getPublicAnecdotes,
 } from "@/lib/content/public";
 
@@ -30,6 +32,26 @@ describe("public content API", () => {
 
     expect(slugs).toEqual(getPublicAnecdotes("en").map((item) => item.slug));
     expect(slugs).toEqual(getPublicAnecdotes("zh").map((item) => item.slug));
+  });
+
+  it("returns concrete browse tags from public anecdote metadata", () => {
+    expect(getPublicAnecdoteTags("en")).toEqual(
+      expect.arrayContaining(["Paris", "John Lennon", "affectionate"]),
+    );
+    expect(getPublicAnecdoteTags("zh")).toEqual(
+      expect.arrayContaining(["巴黎", "约翰·列侬", "亲近"]),
+    );
+  });
+
+  it("filters public anecdotes by tag", () => {
+    expect(filterPublicAnecdotesByTag("en", "Paris").map((item) => item.slug))
+      .toEqual(expect.arrayContaining(["much-better-place-paris"]));
+    expect(
+      filterPublicAnecdotesByTag("zh", "约翰·列侬").map((item) => item.slug),
+    ).toEqual(expect.arrayContaining(["john-paul-meet-1957"]));
+    expect(filterPublicAnecdotesByTag("en", undefined)).toHaveLength(
+      getPublicAnecdotes("en").length,
+    );
   });
 
   it("finds a localized anecdote by slug", () => {
