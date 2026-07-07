@@ -23,6 +23,16 @@ export function AnecdoteDetail({ anecdote, labels }: AnecdoteDetailProps) {
         <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
           {anecdote.hook}
         </p>
+        {anecdote.quote ? (
+          <figure className="mt-6 max-w-3xl border-l-2 border-mustard pl-4">
+            <blockquote className="text-lg font-medium leading-8 text-ink">
+              “{anecdote.quote.text}”
+            </blockquote>
+            <figcaption className="mt-2 text-sm text-muted">
+              {anecdote.quote.attribution}
+            </figcaption>
+          </figure>
+        ) : null}
       </header>
 
       <dl className="mt-8 grid gap-3 rounded-lg border border-ink/10 bg-cream p-5 text-sm sm:grid-cols-2 lg:grid-cols-4">
