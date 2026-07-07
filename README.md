@@ -8,11 +8,12 @@ A multilingual storytelling website for newcomers to the Beatles. The product is
 - `services/api` - Reserved for future API service code.
 - `services/ingestion` - Reserved for future content ingestion workflows.
 - `services/processing` - Reserved for future processing pipelines.
+- `database` - Database design notes and schema documentation.
 - `packages/shared-types` - Shared TypeScript types and utilities.
 - `packages/content-schemas` - Content validation schemas.
 - `packages/prompts` - Prompt assets for future AI-assisted workflows.
 - `packages/terminology` - Shared terminology and translation guidance.
-- `supabase/migrations` - Reserved for future Supabase migrations.
+- `supabase/migrations` - Supabase/PostgreSQL schema migrations.
 
 ## Local Development
 
@@ -61,8 +62,19 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm format:check
+pnpm build
+```
+
+## Database Schema
+
+See `database/README.md` for the schema design notes and Task 3 implementation summary.
+
+The executable migration is:
+
+```text
+supabase/migrations/20260707000000_initial_content_schema.sql
 ```
 
 ## Notes
 
-Database and AI integrations are intentionally not included in this initial skeleton.
+Application database integration and AI integrations are intentionally not included yet.
