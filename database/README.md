@@ -49,6 +49,100 @@ supabase db push
 
 Local SQL execution has not been wired into this repo yet.
 
+## Connecting Supabase
+
+These are the planned steps for wiring the app to Supabase while keeping live data out of the UI until the content API is ready.
+
+### 1. Create or Select a Supabase Project
+
+Create a project in Supabase, then find the project URL and publishable key in the Supabase dashboard.
+
+Use the publishable key for browser-safe client access. Do not put secret/service-role keys in `NEXT_PUBLIC_` environment variables.
+
+### 2. Add Environment Variables
+
+Create a local `.env.local` file at the repo root:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
+```
+
+These values identify the Supabase project for the Next.js app. They do not create tables, apply migrations, or grant access by themselves.
+
+### 3. Install the Supabase Client
+
+From the repo root:
+
+```bash
+pnpm --filter @beatles-story/web add @supabase/supabase-js
+```
+
+This should update `apps/web/package.json` and `pnpm-lock.yaml`.
+
+### 4. Add a Typed Client Module
+
+Create:
+
+```text
+apps/web/src/lib/supabase/client.ts
+```
+
+Expected shape:
+
+```ts
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@beatles-story/shared-types";
+
+export function createSupabaseClient() {
+  return createClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+  );
+}
+```
+
+Keep this module unused by the UI until we deliberately move from static fixture data to live data.
+
+### 5. Link and Apply Migrations
+
+Install the Supabase CLI if needed, then link the local repo to the Supabase project:
+
+```bash
+supabase login
+supabase link --project-ref your-project-ref
+```
+
+Apply migrations:
+
+```bash
+supabase db push
+```
+
+### 6. Verify
+
+Run:
+
+```bash
+pnpm typecheck
+pnpm lint
+pnpm test
+pnpm build
+```
+
+If the client module was added but no UI uses it yet, the app should still build without needing a live database request during rendering.
+
+### Deferred Work
+
+Do not add these during the minimal connection step:
+
+- application data fetching;
+- public read policies;
+- admin auth;
+- row-level security policy design;
+- ingestion jobs;
+- AI integrations.
+
 ## TypeScript Types
 
 Database record types are defined in:

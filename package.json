@@ -12,7 +12,8 @@
     "format:check": "prettier --check ."
   },
   "devDependencies": {
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "supabase": "^2.109.0"
   },
   "engines": {
     "node": ">=20.11.0",

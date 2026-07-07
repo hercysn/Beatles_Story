@@ -6,3 +6,4 @@ coverage
 dist
 pnpm-lock.yaml
 idea.md
+supabase/.temp

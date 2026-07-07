@@ -11,3 +11,4 @@ coverage
 *.tsbuildinfo
 dist
 playwright-report
+supabase/.temp
