@@ -82,7 +82,7 @@ export async function getPublicAnecdoteTags(locale: Locale): Promise<string[]> {
   const tags = new Set<string>();
 
   for (const anecdote of await getPublicAnecdotes(locale)) {
-    for (const tag of getSearchableTags(anecdote)) {
+    for (const tag of getSearchableTags(locale, anecdote)) {
       tags.add(tag);
     }
   }
@@ -103,7 +103,7 @@ export async function filterPublicAnecdotesByTag(
   const normalizedTag = normalizeTag(tag);
 
   return anecdotes.filter((anecdote) =>
-    getSearchableTags(anecdote).some(
+    getSearchableTags(locale, anecdote).some(
       (searchableTag) => normalizeTag(searchableTag) === normalizedTag,
     ),
   );
@@ -323,9 +323,9 @@ function toPublicAnecdote(
           }
         : undefined,
     dateLabel: anecdote.date_label ?? "",
-    people: anecdote.people_tags,
-    place: anecdote.place_label ?? "",
-    tone: anecdote.tone_tags,
+    people: localizeTags(locale, anecdote.people_tags),
+    place: localizeTag(locale, anecdote.place_label ?? ""),
+    tone: localizeTags(locale, anecdote.tone_tags),
     evidenceStatus: toPublicEvidenceStatus(anecdote.evidence_level),
     publicationStatus: anecdote.publication_status,
     verificationStatus: anecdote.verification_status,
@@ -350,7 +350,7 @@ function toPublicAnecdote(
     },
     connectionChain: getStringArrayMetadata(anecdote, "connectionChain"),
     sources: toPublicSources(claimSources),
-    related: anecdote.related_tags,
+    related: localizeTags(locale, anecdote.related_tags),
   };
 }
 
@@ -463,9 +463,9 @@ function toContentLocale(locale: Locale): ContentLocale {
   return locale === "zh" ? "zh-CN" : "en";
 }
 
-function getSearchableTags(anecdote: PublicAnecdote): string[] {
+function getSearchableTags(locale: Locale, anecdote: PublicAnecdote): string[] {
   return [
-    anecdote.evidenceStatus,
+    localizeTag(locale, anecdote.evidenceStatus),
     anecdote.place,
     ...anecdote.people,
     ...anecdote.tone,
@@ -476,3 +476,63 @@ function getSearchableTags(anecdote: PublicAnecdote): string[] {
 function normalizeTag(tag: string) {
   return tag.trim().toLocaleLowerCase();
 }
+
+function localizeTags(locale: Locale, tags: string[]): string[] {
+  return tags.map((tag) => localizeTag(locale, tag));
+}
+
+function localizeTag(locale: Locale, tag: string): string {
+  if (locale !== "zh") {
+    return tag;
+  }
+
+  return chineseTagByEnglish[tag] ?? tag;
+}
+
+const chineseTagByEnglish: Record<string, string> = {
+  "1980": "1980 年",
+  "Anthology-era interview footage": "Anthology 时期访谈影像",
+  "Aunt Mimi": "Mimi 姨妈",
+  "Beatles image": "披头士形象",
+  "Coming Up": "Coming Up",
+  "Corroborated recollection": "有旁证的回忆",
+  "Disputed recollection": "有争议的回忆",
+  "Documented context": "有记录的背景",
+  "Double Fantasy": "Double Fantasy",
+  "Easily overlooked": "容易被忽略",
+  "Fandom theory": "歌迷理论",
+  "George Harrison": "乔治·哈里森",
+  "Hitchhiking": "搭便车",
+  "Interpretive connection": "解释性连接",
+  "Ivan Vaughan": "Ivan Vaughan",
+  "John Lennon": "约翰·列侬",
+  "John and Paul": "约翰与保罗",
+  "John’s presence": "约翰的在场",
+  "Jürgen Vollmer": "Jürgen Vollmer",
+  "Lennon-McCartney": "Lennon-McCartney",
+  "Memory": "记忆",
+  "New York and England": "纽约与英格兰",
+  "Olivia Harrison": "奥利维亚·哈里森",
+  "Paris": "巴黎",
+  "Paul McCartney": "保罗·麦卡特尼",
+  "Paul and George": "保罗与乔治",
+  "Pre-fame": "成名前",
+  "Songs as conversation": "歌曲作为对话",
+  "Symbolic moments": "象征性瞬间",
+  "The End of the End": "The End of the End",
+  "The Quarry Men": "The Quarry Men",
+  "Wales, Devon, and southwest England": "威尔士与英格兰南部",
+  "Woolton": "Woolton",
+  "Woolton, Liverpool": "利物浦 Woolton",
+  "Yoko Ono": "小野洋子",
+  affectionate: "亲近",
+  bittersweet: "苦甜",
+  competitive: "竞争",
+  disputed: "有争议",
+  documented: "有记录",
+  "easily overlooked": "容易被忽略",
+  formative: "形成期",
+  funny: "好笑",
+  revealing: "揭示性",
+  symbolic: "象征性",
+};
