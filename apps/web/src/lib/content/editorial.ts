@@ -112,9 +112,13 @@ const reviewLabelByLocale: Record<
   },
 };
 
-export function getEditorialDashboard(locale: Locale): EditorialDashboard {
-  const publicAnecdotes = getPublicAnecdotes(locale);
-  const canonicalSlugs = getPublicAnecdoteSlugs();
+export async function getEditorialDashboard(
+  locale: Locale,
+): Promise<EditorialDashboard> {
+  const [publicAnecdotes, canonicalSlugs] = await Promise.all([
+    getPublicAnecdotes(locale),
+    getPublicAnecdoteSlugs(),
+  ]);
   const anecdotes = publicAnecdotes.map((anecdote, index) =>
     toEditorialAnecdote(locale, anecdote, canonicalSlugs[index] ?? anecdote.slug),
   );

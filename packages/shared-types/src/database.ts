@@ -53,7 +53,18 @@ export type ConnectionType =
 export type ContentLocale = "en" | "zh-CN";
 
 export type TranslationStatus =
+  "human_translated" | "machine_translated" | "needs_review";
+
+export type TranslationWorkflowStatus =
   "draft" | "machine-translated" | "reviewed" | "approved";
+
+export type PublicationStatus = "draft" | "published" | "hidden";
+
+export type VerificationStatus =
+  "human_verified" | "unverified" | "disputed";
+
+export type SourceStatus =
+  "fully_sourced" | "partially_sourced" | "unsourced";
 
 export type EntityType = "person" | "song" | "place";
 
@@ -129,9 +140,18 @@ export type Anecdote = {
   primary_event_id: Uuid | null;
   evidence_level: EvidenceLevel;
   tone_tags: string[];
+  date_label: string | null;
+  people_tags: string[];
+  place_label: string | null;
+  related_tags: string[];
+  publication_status: PublicationStatus;
+  verification_status: VerificationStatus;
+  ai_assisted: boolean;
+  source_status: SourceStatus;
   beginner_priority: number;
   confidence: number;
   review_status: ReviewStatus;
+  metadata: Json;
   created_at: TimestampString;
   updated_at: TimestampString;
 };
@@ -142,11 +162,17 @@ export type AnecdoteTranslation = {
   locale: ContentLocale;
   title: string;
   hook: string;
+  summary: string;
   what_happened: string;
   why_interesting: string;
   historical_context: string | null;
+  before_section: string | null;
+  connection_section: string | null;
   documented_section: string;
   interpretation_section: string | null;
+  quote_text: string | null;
+  quote_attribution: string | null;
+  translation_workflow_status: TranslationWorkflowStatus;
   translation_status: TranslationStatus;
   created_at: TimestampString;
   updated_at: TimestampString;
@@ -241,13 +267,30 @@ export type AnecdoteInsert = InsertShape<
   Anecdote,
   | "primary_event_id"
   | "tone_tags"
+  | "date_label"
+  | "people_tags"
+  | "place_label"
+  | "related_tags"
+  | "publication_status"
+  | "verification_status"
+  | "ai_assisted"
+  | "source_status"
   | "beginner_priority"
   | "confidence"
   | "review_status"
+  | "metadata"
 >;
 export type AnecdoteTranslationInsert = InsertShape<
   AnecdoteTranslation,
-  "historical_context" | "interpretation_section" | "translation_status"
+  | "summary"
+  | "historical_context"
+  | "before_section"
+  | "connection_section"
+  | "interpretation_section"
+  | "quote_text"
+  | "quote_attribution"
+  | "translation_workflow_status"
+  | "translation_status"
 >;
 type ClaimInsertBase = Omit<
   InsertShape<
@@ -292,51 +335,61 @@ export type Database = {
         Row: Source;
         Insert: SourceInsert;
         Update: SourceUpdate;
+        Relationships: [];
       };
       raw_documents: {
         Row: RawDocument;
         Insert: RawDocumentInsert;
         Update: RawDocumentUpdate;
+        Relationships: [];
       };
       entities: {
         Row: Entity;
         Insert: EntityInsert;
         Update: EntityUpdate;
+        Relationships: [];
       };
       entity_translations: {
         Row: EntityTranslation;
         Insert: EntityTranslationInsert;
         Update: EntityTranslationUpdate;
+        Relationships: [];
       };
       events: {
         Row: Event;
         Insert: EventInsert;
         Update: EventUpdate;
+        Relationships: [];
       };
       anecdotes: {
         Row: Anecdote;
         Insert: AnecdoteInsert;
         Update: AnecdoteUpdate;
+        Relationships: [];
       };
       anecdote_translations: {
         Row: AnecdoteTranslation;
         Insert: AnecdoteTranslationInsert;
         Update: AnecdoteTranslationUpdate;
+        Relationships: [];
       };
       claims: {
         Row: Claim;
         Insert: ClaimInsert;
         Update: ClaimUpdate;
+        Relationships: [];
       };
       claim_sources: {
         Row: ClaimSource;
         Insert: ClaimSourceInsert;
         Update: ClaimSourceUpdate;
+        Relationships: [];
       };
       connections: {
         Row: Connection;
         Insert: ConnectionInsert;
         Update: ConnectionUpdate;
+        Relationships: [];
       };
     };
     Enums: {
@@ -350,8 +403,15 @@ export type Database = {
       connection_type: ConnectionType;
       content_locale: ContentLocale;
       translation_status: TranslationStatus;
+      translation_workflow_status: TranslationWorkflowStatus;
+      publication_status: PublicationStatus;
+      verification_status: VerificationStatus;
+      source_status: SourceStatus;
       entity_type: EntityType;
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    CompositeTypes: Record<string, never>;
   };
 };
 

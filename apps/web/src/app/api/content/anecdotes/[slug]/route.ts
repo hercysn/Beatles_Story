@@ -23,7 +23,7 @@ export async function GET(
   { params }: AnecdoteApiRouteContext,
 ) {
   const { slug } = await params;
-  const anecdote = getPublicAnecdote(resolveLocale(request), slug);
+  const anecdote = await getPublicAnecdote(resolveLocale(request), slug);
 
   if (!anecdote) {
     return NextResponse.json({ error: "Anecdote not found" }, { status: 404 });

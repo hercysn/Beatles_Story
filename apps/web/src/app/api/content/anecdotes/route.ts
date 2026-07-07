@@ -14,6 +14,8 @@ function resolveLocale(request: Request): Locale {
   return routing.defaultLocale;
 }
 
-export function GET(request: Request) {
-  return NextResponse.json(getPublicAnecdoteCollection(resolveLocale(request)));
+export async function GET(request: Request) {
+  return NextResponse.json(
+    await getPublicAnecdoteCollection(resolveLocale(request)),
+  );
 }

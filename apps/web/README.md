@@ -4,18 +4,21 @@ Next.js App Router application for the multilingual Beatles storytelling site.
 
 ## Current Stage
 
-The web app is in the fixture-backed MVP prototype stage.
+The web app is in the content-backend verification stage.
 
-Reader-facing pages are rendered from typed static fixtures and seed content. This lets the site prove the story structure, localization boundaries, and evidence-label approach before the UI moves to live Supabase reads.
+Reader-facing pages use the public content boundary. That boundary reads published Supabase content when database environment variables are configured and falls back to typed fixtures in local development and tests.
+
+Public reads are based on `publication_status = published`. Verification, source coverage, AI assistance, and translation quality are separate trust signals and render as compact badges on anecdote cards and detail pages.
 
 ## Implemented Surfaces
 
 - `src/app/[locale]/page.tsx` renders the localized homepage from `src/content/home.ts`.
 - `src/app/[locale]/start/page.tsx` renders the "Start with the Beatles" guided hook from `src/content/story-pages.ts`.
 - `src/app/[locale]/john-and-paul/page.tsx` renders the "Start with John and Paul" guided hook from `src/content/story-pages.ts`.
-- `src/app/[locale]/anecdotes/page.tsx` and `src/app/[locale]/anecdotes/[slug]/page.tsx` render seed anecdote content through the public content boundary.
-- `src/app/[locale]/timeline/page.tsx` and `src/app/[locale]/editorial/page.tsx` are present as early placeholder routes.
-- `src/app/api/content/anecdotes/route.ts` and `src/app/api/content/anecdotes/[slug]/route.ts` expose the current public anecdote seed content over HTTP.
+- `src/app/[locale]/anecdotes/page.tsx` and `src/app/[locale]/anecdotes/[slug]/page.tsx` render anecdote content through the public content boundary.
+- `src/app/[locale]/timeline/page.tsx` is present as an early placeholder route.
+- `src/app/[locale]/editorial/page.tsx` is an admin-gated editorial dashboard with server-action forms.
+- `src/app/api/content/anecdotes/route.ts` and `src/app/api/content/anecdotes/[slug]/route.ts` expose public anecdote content over HTTP.
 
 ## Content Fixtures
 
@@ -31,7 +34,7 @@ Guided story page fixture data lives in:
 src/content/story-pages.ts
 ```
 
-Anecdote seed content lives in:
+Anecdote fixture fallback content lives in:
 
 ```text
 src/content/anecdotes.ts
@@ -44,6 +47,24 @@ src/lib/content/public.ts
 ```
 
 Do not import anecdote fixtures directly from pages or API handlers outside fixture tests.
+
+## Backend Configuration
+
+Public database reads require:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
+```
+
+Editorial writes require:
+
+```bash
+SUPABASE_SERVICE_ROLE_KEY=...
+EDITORIAL_ADMIN_TOKEN=...
+```
+
+If `EDITORIAL_ADMIN_TOKEN` is set, `/[locale]/editorial` requires an `editorial_admin_token` cookie or `x-editorial-admin-token` header with the matching value. If the token is not set, editorial access stays open for local development.
 
 ## Localization
 
@@ -59,6 +80,16 @@ The homepage, navigation, and guided hook pages have localized English and Simpl
 ## Evidence Model
 
 The story pages are designed to keep narrative flow and evidence boundaries visible at the same time.
+
+For public anecdotes, the current backend tracks:
+
+- `publication_status`: `draft`, `published`, `hidden`;
+- `verification_status`: `human_verified`, `unverified`, `disputed`;
+- `ai_assisted`;
+- `source_status`: `fully_sourced`, `partially_sourced`, `unsourced`;
+- translation status: `human_translated`, `machine_translated`, `needs_review`.
+
+If a requested locale is missing, the public boundary falls back to English and marks the result as an untranslated fallback.
 
 The "Start with John and Paul" page supports chapter-level evidence groups for:
 
@@ -76,6 +107,7 @@ Current frontend tests cover:
 - guided story page fixture coverage;
 - anecdote fixture behavior;
 - public content boundary behavior;
+- database-backed content fallback behavior;
 - route helpers.
 
 Relevant test files include:

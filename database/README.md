@@ -4,16 +4,19 @@ This directory documents the content database design. The executable Supabase/Po
 
 ## Current Stage
 
-The database layer is in the schema-ready, app-integration-pending stage.
+The database layer is in the content-backend verification stage.
 
-The initial PostgreSQL schema and matching shared TypeScript types are present. The public web app still renders from static fixtures and seed content; live Supabase reads, public read policies, admin auth, ingestion jobs, and AI processing are deferred until the content API and editorial workflow are ready.
+The PostgreSQL schema, public/admin policies, seed data, matching shared TypeScript types, Supabase-backed public read boundary, and admin write actions are present. The app falls back to fixtures when Supabase environment variables are not configured. Live Supabase verification still needs migrations and seed data applied to the linked project.
 
 ## Initial Schema
 
-The initial content schema is defined in:
+The content schema and backend policy migrations are defined in:
 
 ```text
 supabase/migrations/20260707000000_initial_content_schema.sql
+supabase/migrations/20260707010000_content_backend_policies.sql
+supabase/migrations/20260707011000_public_content_fields.sql
+supabase/migrations/20260707012000_publication_trust_statuses.sql
 ```
 
 Implemented tables:
@@ -43,7 +46,11 @@ It also includes integrity triggers for:
 - Claims are separate from stories and events so evidence can be attached precisely.
 - Source relationships support evidence, contradiction, contextual mentions, and general references.
 - Connections are intentionally polymorphic because the product needs to connect events, anecdotes, people, songs, and places.
-- Application database clients, auth, row-level security, ingestion, and AI integrations are intentionally not included yet.
+- Public visibility uses `publication_status`: anonymous readers can read published content, while draft and hidden content remain private.
+- Verification, AI assistance, source coverage, and translation quality are separate trust signals and do not block published content from appearing publicly.
+- Admin writes use protected server actions and require `SUPABASE_SERVICE_ROLE_KEY`.
+- Production editorial access should set `EDITORIAL_ADMIN_TOKEN`.
+- Ingestion and AI integrations are intentionally not included yet.
 
 ## Commands
 
@@ -53,7 +60,11 @@ Run Supabase migrations with the Supabase CLI once it is installed and linked to
 supabase db push
 ```
 
-Local SQL execution has not been wired into this repo yet.
+Seed data for the current six anecdotes lives in:
+
+```text
+supabase/seed.sql
+```
 
 ## Connecting Supabase
 

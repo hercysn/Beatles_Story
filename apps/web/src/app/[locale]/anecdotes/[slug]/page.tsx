@@ -12,15 +12,17 @@ type AnecdoteDetailPageProps = {
   params: Promise<{ locale: string; slug: string }>;
 };
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const slugs = await getPublicAnecdoteSlugs();
+
   return routing.locales.flatMap((locale) =>
-    getPublicAnecdoteSlugs().map((slug) => ({ locale, slug })),
+    slugs.map((slug) => ({ locale, slug })),
   );
 }
 
 export async function generateMetadata({ params }: AnecdoteDetailPageProps) {
   const { locale, slug } = await params;
-  const anecdote = getPublicAnecdote(locale as Locale, slug);
+  const anecdote = await getPublicAnecdote(locale as Locale, slug);
 
   if (!anecdote) {
     return {};
@@ -36,8 +38,10 @@ export default async function AnecdoteDetailPage({
   params,
 }: AnecdoteDetailPageProps) {
   const { locale, slug } = await params;
-  const fixture = getPublicAnecdoteCollection(locale as Locale);
-  const anecdote = getPublicAnecdote(locale as Locale, slug);
+  const [fixture, anecdote] = await Promise.all([
+    getPublicAnecdoteCollection(locale as Locale),
+    getPublicAnecdote(locale as Locale, slug),
+  ]);
 
   if (!anecdote) {
     notFound();

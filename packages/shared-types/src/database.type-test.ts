@@ -1,8 +1,12 @@
 import type {
   AnecdoteInsert,
+  AnecdoteTranslationInsert,
   InsertFor,
+  PublicationStatus,
   RowFor,
   SourceInsert,
+  TranslationStatus,
+  VerificationStatus,
 } from "./database";
 
 const sourceInsert: SourceInsert = {
@@ -20,7 +24,26 @@ const sourceInsert: SourceInsert = {
 const anecdoteInsert: AnecdoteInsert = {
   slug: "john-and-paul-demo",
   evidence_level: "documented",
+  publication_status: "published",
+  verification_status: "unverified",
+  ai_assisted: true,
+  source_status: "partially_sourced",
 };
+
+const translationInsert: AnecdoteTranslationInsert = {
+  anecdote_id: "00000000-0000-0000-0000-000000000000",
+  locale: "en",
+  title: "John and Paul meet",
+  hook: "A hook.",
+  what_happened: "What happened.",
+  why_interesting: "Why it matters.",
+  documented_section: "A documented claim.",
+  translation_status: "machine_translated",
+};
+
+const publicationStatus: PublicationStatus = "published";
+const verificationStatus: VerificationStatus = "human_verified";
+const translationStatus: TranslationStatus = "needs_review";
 
 const eventRow: RowFor<"events"> = {
   id: "00000000-0000-0000-0000-000000000000",
@@ -69,6 +92,10 @@ const invalidClaim: InsertFor<"claims"> = {
 
 void sourceInsert;
 void anecdoteInsert;
+void translationInsert;
+void publicationStatus;
+void verificationStatus;
+void translationStatus;
 void eventRow;
 void claimInsert;
 void invalidSource;

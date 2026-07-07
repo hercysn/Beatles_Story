@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { ConnectionChain } from "@/components/connection-chain";
+import { ContentStatusBadges } from "@/components/content-status-badges";
 import { EvidenceLabel } from "@/components/evidence-label";
 import { LocalizedLink } from "@/components/localized-link";
 import type {
@@ -17,7 +18,10 @@ export function AnecdoteDetail({ anecdote, labels }: AnecdoteDetailProps) {
   return (
     <article className="mx-auto w-full max-w-5xl px-6 py-14 sm:py-20">
       <header className="border-l-4 border-apple pl-6">
-        <EvidenceLabel status={anecdote.evidenceStatus} />
+        <div className="flex flex-wrap gap-2">
+          <EvidenceLabel status={anecdote.evidenceStatus} />
+          <ContentStatusBadges anecdote={anecdote} />
+        </div>
         <h1 className="mt-3 text-3xl font-semibold leading-tight text-ink sm:text-5xl">
           {anecdote.title}
         </h1>

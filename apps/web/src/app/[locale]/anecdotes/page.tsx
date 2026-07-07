@@ -19,9 +19,11 @@ export default async function AnecdotesPage({
   const { locale } = await params;
   const { tag } = await searchParams;
   const activeTag = normalizeTagParam(tag);
-  const fixture = getPublicAnecdoteCollection(locale as Locale);
-  const tags = getPublicAnecdoteTags(locale as Locale);
-  const anecdotes = filterPublicAnecdotesByTag(locale as Locale, activeTag);
+  const [fixture, tags, anecdotes] = await Promise.all([
+    getPublicAnecdoteCollection(locale as Locale),
+    getPublicAnecdoteTags(locale as Locale),
+    filterPublicAnecdotesByTag(locale as Locale, activeTag),
+  ]);
 
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-14 sm:py-20">

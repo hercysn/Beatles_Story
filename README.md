@@ -4,21 +4,23 @@ A multilingual storytelling website for newcomers to the Beatles. The product is
 
 ## Current Stage
 
-Beatles Story is in the fixture-backed MVP prototype stage.
+Beatles Story is in the content-backend verification stage.
 
-The web app currently uses typed static content fixtures for the public reader experience. This keeps the story structure, localization model, and UI surfaces testable while the database, editorial workflow, ingestion, and AI-assisted drafting pipelines remain under construction.
+The static prototype is complete. The app now has a Supabase-capable content backend: public content reads use the database when Supabase environment variables are configured and fall back to typed fixtures for local development and tests. The editorial dashboard is protected by an admin gate and includes server-action forms for core content records.
+
+Public visibility is separate from trust. Published content is visible even when it is unverified, disputed, AI-assisted, or partially sourced; those trust states are shown as compact reader-facing badges.
 
 Implemented public surfaces include:
 
 - localized English and Simplified Chinese routes;
 - a content-driven homepage;
 - guided "Start with the Beatles" and "Start with John and Paul" hooks;
-- an anecdote collection and individual anecdote pages backed by seed fixtures;
-- basic timeline and editorial placeholder routes;
-- public anecdote API route handlers over the current seed content;
+- an anecdote collection and individual anecdote pages backed by the public content boundary;
+- basic timeline and editorial routes;
+- public anecdote API route handlers over database-backed content with fixture fallback;
 - content fixture tests and route/content boundary tests.
 
-The database schema and shared TypeScript database types are present, but the public UI is not yet reading live Supabase content.
+The remaining content-backend work is mainly production hardening: apply migrations and seed data to the linked Supabase project, configure admin credentials, and verify real database reads/writes outside the fixture fallback path.
 
 ## Project Structure
 
@@ -87,15 +89,20 @@ pnpm build
 
 See `database/README.md` for schema design notes, migration details, and the current database integration stage.
 
-The executable migration is:
+The executable migrations are:
 
 ```text
 supabase/migrations/20260707000000_initial_content_schema.sql
+supabase/migrations/20260707010000_content_backend_policies.sql
+supabase/migrations/20260707011000_public_content_fields.sql
+supabase/migrations/20260707012000_publication_trust_statuses.sql
 ```
 
 ## Notes
 
-- Application database reads, public read policies, admin auth, ingestion jobs, and AI integrations are intentionally not wired into the public UI yet.
+- Ingestion jobs and AI integrations are intentionally not wired into the public UI yet.
+- Supabase-backed reads require `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+- Editorial writes require `SUPABASE_SERVICE_ROLE_KEY`; production editorial access should also set `EDITORIAL_ADMIN_TOKEN`.
 - Several reader-facing quotes in the guided hook drafts are marked for source and wording verification before publication.
 - English and Chinese guided hook pages now have first-draft long-form content; both still need a later editorial/source-verification pass.
 
