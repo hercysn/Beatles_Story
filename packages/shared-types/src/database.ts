@@ -199,23 +199,21 @@ export type TableName =
 
 type GeneratedColumns = "id" | "created_at" | "updated_at";
 
-type InsertDefaults =
-  | "fetched_at"
-  | "metadata"
-  | "aliases"
-  | "confidence"
-  | "review_status"
-  | "tone_tags"
-  | "beginner_priority"
-  | "translation_status";
-
 type InsertShape<Row, Optional extends keyof Row = never> = Omit<
   Row,
   GeneratedColumns | Optional
 > &
   Partial<Pick<Row, Extract<GeneratedColumns | Optional, keyof Row>>>;
 
-export type SourceInsert = InsertShape<Source>;
+export type SourceInsert = InsertShape<
+  Source,
+  | "author"
+  | "publisher"
+  | "url"
+  | "publication_date"
+  | "original_language"
+  | "rights_notes"
+>;
 export type RawDocumentInsert = InsertShape<
   RawDocument,
   | "external_id"
@@ -251,11 +249,26 @@ export type AnecdoteTranslationInsert = InsertShape<
   AnecdoteTranslation,
   "historical_context" | "interpretation_section" | "translation_status"
 >;
-export type ClaimInsert = InsertShape<
-  Claim,
-  "anecdote_id" | "event_id" | "confidence" | "review_status"
+type ClaimInsertBase = Omit<
+  InsertShape<
+    Claim,
+    "anecdote_id" | "event_id" | "confidence" | "review_status"
+  >,
+  "anecdote_id" | "event_id"
 >;
-export type ClaimSourceInsert = ClaimSource;
+export type ClaimInsert = ClaimInsertBase &
+  (
+    | {
+        anecdote_id: Uuid;
+        event_id?: null;
+      }
+    | {
+        anecdote_id?: null;
+        event_id: Uuid;
+      }
+  );
+export type ClaimSourceInsert = Omit<ClaimSource, "created_at"> &
+  Partial<Pick<ClaimSource, "created_at">>;
 export type ConnectionInsert = InsertShape<
   Connection,
   "confidence" | "review_status"

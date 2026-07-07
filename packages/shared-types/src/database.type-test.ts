@@ -38,7 +38,6 @@ const eventRow: RowFor<"events"> = {
 
 const claimInsert: InsertFor<"claims"> = {
   anecdote_id: "00000000-0000-0000-0000-000000000000",
-  event_id: null,
   claim_type: "fact",
   claim_text: "A documented claim.",
 };
@@ -60,6 +59,14 @@ const invalidAnecdote: AnecdoteInsert = {
   evidence_level: "documented",
 };
 
+// @ts-expect-error claims must attach to exactly one parent.
+const invalidClaim: InsertFor<"claims"> = {
+  anecdote_id: "00000000-0000-0000-0000-000000000000",
+  event_id: "00000000-0000-0000-0000-000000000000",
+  claim_type: "fact",
+  claim_text: "A claim with two parents.",
+};
+
 void sourceInsert;
 void anecdoteInsert;
 void eventRow;
@@ -67,3 +74,4 @@ void claimInsert;
 void invalidSource;
 void invalidEvent;
 void invalidAnecdote;
+void invalidClaim;

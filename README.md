@@ -9,7 +9,7 @@ A multilingual storytelling website for newcomers to the Beatles. The product is
 - `services/ingestion` - Reserved for future content ingestion workflows.
 - `services/processing` - Reserved for future processing pipelines.
 - `database` - Database design notes and schema documentation.
-- `packages/shared-types` - Shared TypeScript types and utilities.
+- `packages/shared-types` - Shared TypeScript types, including database row/insert/update types.
 - `packages/content-schemas` - Content validation schemas.
 - `packages/prompts` - Prompt assets for future AI-assisted workflows.
 - `packages/terminology` - Shared terminology and translation guidance.
@@ -67,7 +67,7 @@ pnpm build
 
 ## Database Schema
 
-See `database/README.md` for the schema design notes and Task 3 implementation summary.
+See `database/README.md` for the schema design notes and Task 3/Task 4 implementation summaries.
 
 The executable migration is:
 
