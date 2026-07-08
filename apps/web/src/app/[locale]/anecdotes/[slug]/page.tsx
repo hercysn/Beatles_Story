@@ -38,14 +38,21 @@ export default async function AnecdoteDetailPage({
   params,
 }: AnecdoteDetailPageProps) {
   const { locale, slug } = await params;
+  const currentLocale = locale as Locale;
   const [fixture, anecdote] = await Promise.all([
-    getPublicAnecdoteCollection(locale as Locale),
-    getPublicAnecdote(locale as Locale, slug),
+    getPublicAnecdoteCollection(currentLocale),
+    getPublicAnecdote(currentLocale, slug),
   ]);
 
   if (!anecdote) {
     notFound();
   }
 
-  return <AnecdoteDetail anecdote={anecdote} labels={fixture.labels.detail} />;
+  return (
+    <AnecdoteDetail
+      anecdote={anecdote}
+      labels={fixture.labels.detail}
+      locale={currentLocale}
+    />
+  );
 }

@@ -1,4 +1,5 @@
 import type { PublicEvidenceStatus } from "@/lib/content/public";
+import type { Locale } from "@/lib/routes";
 
 type EvidenceTone = "fact" | "recollection" | "disputed" | "interpretive";
 
@@ -19,10 +20,15 @@ const evidenceClassByTone: Record<EvidenceTone, string> = {
 
 type EvidenceLabelProps = {
   status: PublicEvidenceStatus;
+  locale?: Locale;
   className?: string;
 };
 
-export function EvidenceLabel({ status, className = "" }: EvidenceLabelProps) {
+export function EvidenceLabel({
+  status,
+  locale = "en",
+  className = "",
+}: EvidenceLabelProps) {
   const tone = evidenceToneByStatus[status];
 
   return (
@@ -33,7 +39,23 @@ export function EvidenceLabel({ status, className = "" }: EvidenceLabelProps) {
         className,
       ].join(" ")}
     >
-      {status}
+      {getEvidenceLabel(status, locale)}
     </span>
   );
+}
+
+function getEvidenceLabel(status: PublicEvidenceStatus, locale: Locale) {
+  if (locale !== "zh") {
+    return status;
+  }
+
+  const labelByStatus: Record<PublicEvidenceStatus, string> = {
+    "Documented context": "有记录的背景",
+    "Corroborated recollection": "有旁证的回忆",
+    "Disputed recollection": "有争议的回忆",
+    "Interpretive connection": "解释性连接",
+    "Fandom theory": "歌迷理论",
+  };
+
+  return labelByStatus[status];
 }

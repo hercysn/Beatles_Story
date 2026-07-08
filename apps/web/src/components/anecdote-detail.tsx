@@ -8,19 +8,25 @@ import type {
   PublicAnecdote,
   PublicAnecdoteDetailLabels,
 } from "@/lib/content/public";
+import type { Locale } from "@/lib/routes";
 
 type AnecdoteDetailProps = {
   anecdote: PublicAnecdote;
   labels: PublicAnecdoteDetailLabels;
+  locale?: Locale;
 };
 
-export function AnecdoteDetail({ anecdote, labels }: AnecdoteDetailProps) {
+export function AnecdoteDetail({
+  anecdote,
+  labels,
+  locale = "en",
+}: AnecdoteDetailProps) {
   return (
     <article className="mx-auto w-full max-w-5xl px-6 py-14 sm:py-20">
       <header className="border-l-4 border-apple pl-6">
         <div className="flex flex-wrap gap-2">
-          <EvidenceLabel status={anecdote.evidenceStatus} />
-          <ContentStatusBadges anecdote={anecdote} />
+          <EvidenceLabel status={anecdote.evidenceStatus} locale={locale} />
+          <ContentStatusBadges anecdote={anecdote} locale={locale} />
         </div>
         <h1 className="mt-3 text-3xl font-semibold leading-tight text-ink sm:text-5xl">
           {anecdote.title}

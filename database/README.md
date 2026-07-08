@@ -66,9 +66,9 @@ Seed data for the current six anecdotes lives in:
 supabase/seed.sql
 ```
 
-## Connecting Supabase
+## Live Supabase Verification
 
-These are the planned steps for wiring the app to Supabase while keeping live data out of the UI until the content API is ready.
+Use this checklist to verify that the content backend is running against Supabase instead of the fixture fallback.
 
 ### 1. Create or Select a Supabase Project
 
@@ -76,52 +76,28 @@ Create a project in Supabase, then find the project URL and publishable key in t
 
 Use the publishable key for browser-safe client access. Do not put secret/service-role keys in `NEXT_PUBLIC_` environment variables.
 
-### 2. Add Environment Variables
+### 2. Configure Environment Variables
 
-Create a local `.env.local` file at the repo root:
+Create a local `.env.local` file for the Next.js app:
+
+```text
+apps/web/.env.local
+```
+
+Add:
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+EDITORIAL_ADMIN_TOKEN=choose-a-secret-token
 ```
 
-These values identify the Supabase project for the Next.js app. They do not create tables, apply migrations, or grant access by themselves.
+The public variables enable read queries. `SUPABASE_SERVICE_ROLE_KEY` enables protected server-side editorial writes. `EDITORIAL_ADMIN_TOKEN` protects the editorial route and write actions.
 
-### 3. Install the Supabase Client
+If these variables only exist in the repo-root `.env.local`, the app may not see them when running `pnpm dev`, because the Next.js app runs from `apps/web`.
 
-From the repo root:
-
-```bash
-pnpm --filter @beatles-story/web add @supabase/supabase-js
-```
-
-This should update `apps/web/package.json` and `pnpm-lock.yaml`.
-
-### 4. Add a Typed Client Module
-
-Create:
-
-```text
-apps/web/src/lib/supabase/client.ts
-```
-
-Expected shape:
-
-```ts
-import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@beatles-story/shared-types";
-
-export function createSupabaseClient() {
-  return createClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-  );
-}
-```
-
-Keep this module unused by the UI until we deliberately move from static fixture data to live data.
-
-### 5. Link and Apply Migrations
+### 3. Link and Apply Migrations
 
 Install the Supabase CLI if needed, then link the local repo to the Supabase project:
 
@@ -136,29 +112,106 @@ Apply migrations:
 supabase db push
 ```
 
-### 6. Verify
-
-Run:
+For local Supabase verification, reset the local database so migrations and seed data are replayed together:
 
 ```bash
-pnpm typecheck
+supabase db reset
+```
+
+For a remote project, apply migrations with `supabase db push`, then run `supabase/seed.sql` through the SQL editor or `psql`.
+
+### 4. Verify Public Reads Use Supabase
+
+Start the app:
+
+```bash
+pnpm dev
+```
+
+Open:
+
+```text
+http://localhost:3000/en/anecdotes
+http://localhost:3000/zh/anecdotes
+http://localhost:3000/api/content/anecdotes?locale=en
+```
+
+Temporarily edit a published anecdote title in Supabase. Refresh the public page or API route. If the changed title appears, the app is reading live Supabase content. If the fixture title appears, the app is still falling back to local fixtures.
+
+### 5. Verify Publication Visibility
+
+Draft and hidden anecdotes must stay private, while published anecdotes remain visible regardless of trust status.
+
+Run this against Supabase:
+
+```sql
+update public.anecdotes
+set publication_status = 'draft'
+where slug = 'john-paul-meet-1957';
+```
+
+Refresh `/en/anecdotes` and `/api/content/anecdotes?locale=en`. The anecdote should disappear.
+
+Restore it and change trust signals:
+
+```sql
+update public.anecdotes
+set
+  publication_status = 'published',
+  verification_status = 'unverified',
+  ai_assisted = true,
+  source_status = 'partially_sourced'
+where slug = 'john-paul-meet-1957';
+```
+
+The anecdote should reappear with reader-facing badges such as `Unverified`, `AI-assisted`, and `Partially sourced`.
+
+### 6. Verify Locale Fallback
+
+Temporarily remove the Chinese translation for one anecdote:
+
+```sql
+delete from public.anecdote_translations
+where anecdote_id = (
+  select id from public.anecdotes where slug = 'john-paul-meet-1957'
+)
+and locale = 'zh-CN';
+```
+
+Open:
+
+```text
+http://localhost:3000/zh/anecdotes/john-paul-meet-1957
+```
+
+The page should show English content and the `Showing English fallback` badge.
+
+After the check, restore the deleted translation by rerunning `supabase/seed.sql`.
+
+### 7. Verify Editorial Access and Writes
+
+With `EDITORIAL_ADMIN_TOKEN` set, opening this route without the token should show an access-required state:
+
+```text
+http://localhost:3000/en/editorial
+```
+
+To test with the token, send the `x-editorial-admin-token` header or set an `editorial_admin_token` cookie with the configured value. Then submit one editorial form and confirm the corresponding Supabase row changed.
+
+Anonymous users must not be able to read draft or hidden content, access `raw_documents`, or call protected server actions successfully.
+
+### 8. Run Final Checks
+
+Run the standard project checks:
+
+```bash
 pnpm lint
+pnpm typecheck
 pnpm test
 pnpm build
 ```
 
-If the client module was added but no UI uses it yet, the app should still build without needing a live database request during rendering.
-
-### Deferred Work
-
-Do not add these during the minimal connection step:
-
-- application data fetching;
-- public read policies;
-- admin auth;
-- row-level security policy design;
-- ingestion jobs;
-- AI integrations.
+The content-backend verification stage is complete when public reads, RLS visibility, locale fallback, and admin writes all work against Supabase without relying on fixture fallback.
 
 ## TypeScript Types
 

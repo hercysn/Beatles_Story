@@ -136,11 +136,13 @@ export function StoryPage(props: StoryPageProps) {
                 </p>
                 <ul className="mt-2 flex flex-wrap gap-2">
                   {chapter.relatedEvents.map((event) => (
-                    <li
-                      key={event}
-                      className="rounded-full bg-grove px-3 py-1 text-sm text-ink"
-                    >
-                      {event}
+                    <li key={event}>
+                      <a
+                        href={`#chapter-${index + 1}`}
+                        className="inline-flex rounded-full bg-grove px-3 py-1 text-sm text-ink ring-1 ring-transparent transition hover:-translate-y-0.5 hover:bg-white hover:ring-apple/25"
+                      >
+                        {event}
+                      </a>
                     </li>
                   ))}
                 </ul>

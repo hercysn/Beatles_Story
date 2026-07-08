@@ -2,12 +2,14 @@ import { ContentStatusBadges } from "@/components/content-status-badges";
 import { EvidenceLabel } from "@/components/evidence-label";
 import { LocalizedLink } from "@/components/localized-link";
 import type { PublicAnecdote } from "@/lib/content/public";
+import type { Locale } from "@/lib/routes";
 
 type AnecdoteCardProps = {
   anecdote: PublicAnecdote;
   readLabel: string;
   peopleLabel: string;
   placeLabel: string;
+  locale?: Locale;
 };
 
 export function AnecdoteCard({
@@ -15,12 +17,13 @@ export function AnecdoteCard({
   readLabel,
   peopleLabel,
   placeLabel,
+  locale = "en",
 }: AnecdoteCardProps) {
   return (
     <article className="group flex h-full flex-col rounded-lg border border-ink/10 bg-cream p-5 shadow-sm shadow-ink/5 transition hover:-translate-y-0.5 hover:border-apple hover:bg-white">
       <div className="flex flex-wrap gap-2">
-        <EvidenceLabel status={anecdote.evidenceStatus} />
-        <ContentStatusBadges anecdote={anecdote} />
+        <EvidenceLabel status={anecdote.evidenceStatus} locale={locale} />
+        <ContentStatusBadges anecdote={anecdote} locale={locale} />
         <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-muted ring-1 ring-ink/10">
           {anecdote.dateLabel}
         </span>

@@ -17,12 +17,13 @@ export default async function AnecdotesPage({
   searchParams,
 }: AnecdotesPageProps) {
   const { locale } = await params;
+  const currentLocale = locale as Locale;
   const { tag } = await searchParams;
   const activeTag = normalizeTagParam(tag);
   const [fixture, tags, anecdotes] = await Promise.all([
-    getPublicAnecdoteCollection(locale as Locale),
-    getPublicAnecdoteTags(locale as Locale),
-    filterPublicAnecdotesByTag(locale as Locale, activeTag),
+    getPublicAnecdoteCollection(currentLocale),
+    getPublicAnecdoteTags(currentLocale),
+    filterPublicAnecdotesByTag(currentLocale, activeTag),
   ]);
 
   return (
@@ -100,6 +101,7 @@ export default async function AnecdotesPage({
             peopleLabel={fixture.labels.detail.people}
             placeLabel={fixture.labels.detail.place}
             readLabel={fixture.labels.readStory}
+            locale={currentLocale}
           />
         ))}
       </section>
