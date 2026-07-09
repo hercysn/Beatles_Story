@@ -50,6 +50,7 @@ export type EditorialDashboard = {
     approve: string;
     requestChanges: string;
     attachSource: string;
+    ingestionQueue: string;
     notAvailable: string;
   };
   queues: EditorialQueue[];
@@ -73,6 +74,7 @@ const labelsByLocale: Record<Locale, EditorialDashboard["labels"]> = {
     approve: "Approve",
     requestChanges: "Request changes",
     attachSource: "Attach source",
+    ingestionQueue: "Ingestion queue",
     notAvailable: "Not available",
   },
   zh: {
@@ -90,6 +92,7 @@ const labelsByLocale: Record<Locale, EditorialDashboard["labels"]> = {
     approve: "通过",
     requestChanges: "请求修改",
     attachSource: "附加来源",
+    ingestionQueue: "采集队列",
     notAvailable: "暂无",
   },
 };

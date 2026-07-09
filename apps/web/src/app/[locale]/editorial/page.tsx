@@ -1,8 +1,10 @@
 import type { ReactNode } from "react";
+import { connection } from "next/server";
 
 import { LocalizedLink } from "@/components/localized-link";
 import type { Locale } from "@/i18n/routing";
 import { getEditorialAccess } from "@/lib/content/admin";
+import { logoutEditorialAdminAction } from "@/lib/content/admin-actions";
 import { getEditorialDashboard } from "@/lib/content/editorial";
 import {
   attachClaimSourceAction,
@@ -25,7 +27,9 @@ const statusClassName = {
 };
 
 export default async function EditorialPage({ params }: EditorialPageProps) {
+  await connection();
   const { locale } = await params;
+  const currentLocale = locale as Locale;
   const access = await getEditorialAccess();
 
   if (!access.allowed) {
@@ -38,12 +42,18 @@ export default async function EditorialPage({ params }: EditorialPageProps) {
           <p className="mt-4 text-base leading-7 text-muted">
             {access.message}
           </p>
+          <LocalizedLink
+            href={`/editorial/login?redirectTo=/${currentLocale}/editorial`}
+            className="mt-6 inline-flex rounded-lg bg-apple px-4 py-2 text-sm font-semibold text-white"
+          >
+            {currentLocale === "zh" ? "编辑登录" : "Editorial login"}
+          </LocalizedLink>
         </div>
       </main>
     );
   }
 
-  const dashboard = await getEditorialDashboard(locale as Locale);
+  const dashboard = await getEditorialDashboard(currentLocale);
 
   return (
     <div className="mx-auto w-full max-w-7xl px-6 py-10 sm:py-14">
@@ -65,6 +75,12 @@ export default async function EditorialPage({ params }: EditorialPageProps) {
           ) : null}
         </div>
         <div className="flex flex-wrap gap-2">
+          <LocalizedLink
+            href="/editorial/ingestion"
+            className="rounded-lg border border-ink/10 bg-cream px-4 py-2 text-sm font-semibold text-ink"
+          >
+            {dashboard.labels.ingestionQueue}
+          </LocalizedLink>
           <button
             className="rounded-lg bg-apple px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-ink/10"
             type="button"
@@ -83,6 +99,19 @@ export default async function EditorialPage({ params }: EditorialPageProps) {
           >
             {dashboard.labels.attachSource}
           </button>
+          <form action={logoutEditorialAdminAction}>
+            <input
+              name="redirectTo"
+              type="hidden"
+              value={`/${currentLocale}/editorial`}
+            />
+            <button
+              className="rounded-lg border border-ink/10 bg-cream px-4 py-2 text-sm font-semibold text-ink"
+              type="submit"
+            >
+              {currentLocale === "zh" ? "退出" : "Log out"}
+            </button>
+          </form>
         </div>
       </header>
 

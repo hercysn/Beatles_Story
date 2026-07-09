@@ -12,3 +12,4 @@ coverage
 dist
 playwright-report
 supabase/.temp
+services/ingestion/tmp

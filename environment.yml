@@ -1,4 +1,4 @@
 channels:
   - defaults
 dependencies:
-  - nodejs=20
+  - nodejs=22

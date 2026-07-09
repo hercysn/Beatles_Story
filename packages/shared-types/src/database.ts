@@ -66,6 +66,9 @@ export type VerificationStatus =
 export type SourceStatus =
   "fully_sourced" | "partially_sourced" | "unsourced";
 
+export type RawDocumentReviewStatus =
+  "new" | "reviewing" | "approved_for_conversion" | "ignored" | "converted";
+
 export type EntityType = "person" | "song" | "place";
 
 export type Source = {
@@ -94,6 +97,8 @@ export type RawDocument = {
   fetched_at: TimestampString;
   content_hash: string;
   language: string | null;
+  review_status: RawDocumentReviewStatus;
+  review_notes: string | null;
   metadata: Json;
   created_at: TimestampString;
   updated_at: TimestampString;
@@ -247,6 +252,8 @@ export type RawDocumentInsert = InsertShape<
   | "published_at"
   | "fetched_at"
   | "language"
+  | "review_status"
+  | "review_notes"
   | "metadata"
 >;
 export type EntityInsert = InsertShape<Entity, "aliases" | "metadata">;
@@ -407,6 +414,7 @@ export type Database = {
       publication_status: PublicationStatus;
       verification_status: VerificationStatus;
       source_status: SourceStatus;
+      raw_document_review_status: RawDocumentReviewStatus;
       entity_type: EntityType;
     };
     Views: Record<string, never>;

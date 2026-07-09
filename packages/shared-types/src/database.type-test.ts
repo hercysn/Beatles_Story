@@ -3,6 +3,7 @@ import type {
   AnecdoteTranslationInsert,
   InsertFor,
   PublicationStatus,
+  RawDocumentReviewStatus,
   RowFor,
   SourceInsert,
   TranslationStatus,
@@ -44,6 +45,8 @@ const translationInsert: AnecdoteTranslationInsert = {
 const publicationStatus: PublicationStatus = "published";
 const verificationStatus: VerificationStatus = "human_verified";
 const translationStatus: TranslationStatus = "needs_review";
+const rawDocumentReviewStatus: RawDocumentReviewStatus =
+  "approved_for_conversion";
 
 const eventRow: RowFor<"events"> = {
   id: "00000000-0000-0000-0000-000000000000",
@@ -96,6 +99,7 @@ void translationInsert;
 void publicationStatus;
 void verificationStatus;
 void translationStatus;
+void rawDocumentReviewStatus;
 void eventRow;
 void claimInsert;
 void invalidSource;

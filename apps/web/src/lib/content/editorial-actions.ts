@@ -6,6 +6,7 @@ import type {
   DatePrecision,
   EvidenceLevel,
   PublicationStatus,
+  RawDocumentReviewStatus,
   ReviewStatus,
   SourceStatus,
   SourceType,
@@ -261,6 +262,55 @@ export async function attachClaimSourceAction(
   revalidateEditorial();
 }
 
+export async function updateRawDocumentReviewAction(
+  _state: RawDocumentReviewActionState,
+  formData: FormData,
+): Promise<RawDocumentReviewActionState> {
+  try {
+    await assertWritableBackend();
+    const supabase = createSupabaseAdminClient();
+    const id = getRequiredString(formData, "rawDocumentId");
+    const reviewStatus = getEnumValue<RawDocumentReviewStatus>(
+      formData,
+      "reviewStatus",
+      ["new", "reviewing", "approved_for_conversion", "ignored", "converted"],
+    );
+    const reviewNotes = getOptionalString(formData, "reviewNotes");
+
+    const { data, error } = await supabase
+      .from("raw_documents")
+      .update({
+        review_status: reviewStatus,
+        review_notes: reviewNotes,
+      })
+      .eq("id", id)
+      .select("id")
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    if (!data) {
+      throw new Error(`Raw document not found: ${id}`);
+    }
+
+    return {
+      ok: true,
+      message: "Saved.",
+      reviewStatus,
+      reviewNotes: reviewNotes ?? "",
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      message: error instanceof Error ? error.message : "Save failed.",
+      reviewStatus: null,
+      reviewNotes: null,
+    };
+  }
+}
+
 async function assertWritableBackend() {
   await assertEditorialAdmin();
 
@@ -337,6 +387,15 @@ function getEnumValue<T extends string>(
 function revalidateEditorial() {
   revalidatePath("/en/editorial");
   revalidatePath("/zh/editorial");
+  revalidatePath("/en/editorial/ingestion");
+  revalidatePath("/zh/editorial/ingestion");
   revalidatePath("/en/anecdotes");
   revalidatePath("/zh/anecdotes");
 }
+
+export type RawDocumentReviewActionState = {
+  ok: boolean;
+  message: string | null;
+  reviewStatus: RawDocumentReviewStatus | null;
+  reviewNotes: string | null;
+};
